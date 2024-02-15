@@ -24,6 +24,11 @@ function setBackgroundColorById(elementId) {
     element.classList.add('bg-orange-400')
 }
 
+function removeBackgroundColorById(elementId) {
+    const element = document.getElementById(elementId);
+    element.classList.remove('bg-orange-400')
+}
+
 function gameLoop() {
     // step-1: Random alphabet generate
     const alphabet = getRandomAlphabet();
@@ -32,6 +37,42 @@ function gameLoop() {
     currentAlphabetElement.innerText = alphabet;
     setBackgroundColorById(alphabet);
 }
+
+
+function keyboardKeyUp(event) {
+
+    const playerPressed = event.key;
+    const currentAlphabetElement = document.getElementById('current-alphabet');
+    const currentAlphabet = currentAlphabetElement.innerText;
+    const expectedAlphabet = currentAlphabet.toLowerCase();
+
+    if (playerPressed === expectedAlphabet) {
+        const currentScoreElement = document.getElementById('current-score');
+        const currentScore = parseInt(currentScoreElement.innerText);
+
+        const newScore = currentScore + 1;
+        currentScoreElement.innerText = newScore;
+        // const currentScoreElementNew = currentScoreElement.innerText = newScore;
+
+        // score section value added.
+        const resultScore = document.getElementById('result-score');
+        resultScore.innerText = newScore;
+
+        removeBackgroundColorById(playerPressed);
+        gameLoop();
+    } else {
+        const currentLifeElement = document.getElementById('current-life');
+        const currentLife = parseInt(currentLifeElement.innerText);
+        const newLife = currentLife - 1;
+        currentLifeElement.innerText = newLife;
+        if (newLife === 0) {
+            hideElementById('play-ground');
+            showElementById('final-score');
+        }
+    }
+}
+
+document.addEventListener('keyup', keyboardKeyUp);
 
 function play() {
 
@@ -46,4 +87,25 @@ function play() {
     hideElementById('home-screen');
     showElementById('play-ground');
     gameLoop();
+}
+
+
+function playAgain() {
+    hideElementById('final-score');
+    showElementById('play-ground');
+    // const currentLifeElement = document.getElementById('current-life');
+    // currentLifeElement.innerText = 5;
+    document.getElementById('current-life').innerText = 5;
+    document.getElementById('current-score').innerText = 0;
+    const resultScore = document.getElementById('result-score');
+    resultScore.innerText = 0;
+}
+
+
+function backHome() {
+    hideElementById('final-score');
+    showElementById('home-screen');
+    document.getElementById('current-life').innerText = 5;
+    document.getElementById('current-score').innerText = 0;
+
 }
